@@ -1,0 +1,32 @@
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { UserRole } from '../../common/enums/user.enums';
+
+export class AdminCreateUserDto {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(20)
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'username may only contain letters, numbers and underscores',
+  })
+  username: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(8, { message: 'password must be at least 8 characters long' })
+  @MaxLength(64)
+  password: string;
+
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole;
+}

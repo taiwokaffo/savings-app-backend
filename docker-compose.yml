@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: savings_app
+    ports:
+      - '5432:5432'
+    volumes:
+      - savings_app_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    restart: unless-stopped
+    ports:
+      - '1025:1025' # SMTP - the api container sends here
+      - '8025:8025' # Web UI - open http://localhost:8025 to view emails
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    environment:
+      PORT: 3000
+      APP_URL: http://localhost:3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: savings_app
+      DB_SYNCHRONIZE: 'true'
+      JWT_SECRET: change_this_to_a_long_random_secret
+      JWT_EXPIRES_IN: 1d
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_SECURE: 'false'
+      MAIL_USER: ''
+      MAIL_PASS: ''
+      MAIL_FROM: 'Savings App <no-reply@savings-app.local>'
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY:-}
+      KORAPAY_SECRET_KEY: ${KORAPAY_SECRET_KEY:-}
+    ports:
+      - '3000:3000'
+
+volumes:
+  savings_app_pgdata:
