@@ -70,7 +70,7 @@ autosave, deposit, check balances — with:
 ```bash
 ./scripts/smoke-test.sh
 # or against a different host:
-./scripts/smoke-test.sh http://localhost:3000/api
+./scripts/smoke-test.sh http://129.121.115.87:3000/api
 ```
 
 ## 2c. Testing email verification
