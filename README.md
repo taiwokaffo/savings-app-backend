@@ -17,7 +17,7 @@ docker compose up --build
 ```
 
 This starts Postgres and the API together. API is served under
-`http://localhost:3000/api`.
+`http://129.121.115.87:3000/api`.
 
 ### Option B — Local Node + your own Postgres
 
@@ -59,7 +59,7 @@ auto-create tables on boot — fine for development. For production, set it to
 npm run start:dev
 ```
 
-API is served under `http://localhost:3000/api`.
+API is served under `http://129.121.115.87:3000/api`.
 
 ## 2b. Smoke test
 
@@ -95,7 +95,7 @@ docker compose up --build
 ```
 
 `docker-compose.yml` already points the API at a bundled MailHog container.
-Register a user, then open **http://localhost:8025** — the verification
+Register a user, then open **http://129.121.115.87:8025** — the verification
 email (with a clickable link) will be sitting in the inbox. This is the
 closest thing to testing what a real user would see.
 
